@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using CarApi.Core.Services;
 using CarApi.Data.Contexts;
+using CarApi.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Stocks.Middleware;
-using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 
 namespace CarApi
@@ -24,21 +22,19 @@ namespace CarApi
         {
             Configuration = configuration;
             AppSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
-
-            //Log.Logger = new LoggerConfiguration()
-            //    .MinimumLevel.Warning()
-            //    .WriteTo.MicrosoftTeams(AppSettings.MsTeamsWebHook)
-            //    .CreateLogger();
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddHttpClient("highInterest", client =>
-            //{
-            //    client.BaseAddress = new Uri("https://highshortinterest.com");
-            //    client.Timeout = new TimeSpan(0, 0, 30);
-            //    client.DefaultRequestHeaders.Clear();
-            //});
+            services.AddScoped<IAutoPliusService, AutoPliusService>();
+            services.AddScoped<IAutoPliusProvider, AutoPliusProvider>();
+            services.AddHttpClient("autoPlius", client =>
+            {
+                client.BaseAddress = new Uri("https://m.autoplius.lt");
+                client.Timeout = new TimeSpan(0, 0, 30);
+                client.DefaultRequestHeaders.Clear();
+            });
 
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddOptions<AppSettings>().Bind(Configuration.GetSection("AppSettings"));
 
             services.AddDbContext<CarContext>(options =>
@@ -47,16 +43,19 @@ namespace CarApi
                     options => options.EnableRetryOnFailure());
             });
 
+            services.AddControllers();
+            services.AddSwaggerGen();
 
-            services.AddSwaggerGen(c =>
-            {
-            });
+            services.AddCors(options => options.AddPolicy("AllowEverything", builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
+            //app.UseCors("AllowEverything");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
@@ -67,7 +66,7 @@ namespace CarApi
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Car API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cars");
             });
         }
     }
