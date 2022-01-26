@@ -15,4 +15,8 @@
     <Folder Include="Queries\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CarApi.Model\CarApi.Model.csproj" />
+  </ItemGroup>
+
 </Project>

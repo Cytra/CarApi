@@ -8,5 +8,6 @@ namespace CarApi
     public class AppSettings
     {
         public string SqlConnectionString { get; set; }
+        public string  AutopliusCookie { get; set; }
     }
 }

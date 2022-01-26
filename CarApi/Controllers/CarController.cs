@@ -24,8 +24,8 @@ namespace CarApi.Controllers
         [HttpGet("JustTesting")]
         public async Task<IActionResult> GetAd()
         {
-            await _autoPliusService.Test();
-            return Ok("ok");
+            var result = await _autoPliusService.Test();
+            return Ok(result);
         }
     }
 }
