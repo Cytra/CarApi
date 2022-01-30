@@ -10,6 +10,7 @@ using Stocks.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Swashbuckle.AspNetCore.Filters;
 
 
 namespace CarApi
@@ -43,8 +44,20 @@ namespace CarApi
                     options => options.EnableRetryOnFailure());
             });
 
-            services.AddControllers();
-            services.AddSwaggerGen();
+            services.AddControllers()
+                .AddNewtonsoftJson(opt =>
+                {
+                    //opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
+                    //opt.SerializerSettings.Formatting = Formatting.None;
+                    //opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    opt.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    //JsonConvert.DefaultSettings = () => opt.SerializerSettings;
+                });
+            services.AddSwaggerGen(c =>
+            {
+                c.ExampleFilters();
+            });
+            services.AddSwaggerExamplesFromAssemblyOf<Startup>();
 
             services.AddCors(options => options.AddPolicy("AllowEverything", builder => builder
                 .AllowAnyOrigin()
@@ -56,7 +69,7 @@ namespace CarApi
         {
             app.UseMiddleware<ExceptionMiddleware>();
             //app.UseCors("AllowEverything");
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

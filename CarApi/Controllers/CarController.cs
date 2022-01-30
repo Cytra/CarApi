@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using CarApi.Core.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CarApi.Data.Contexts;
-using CarApi.Data.Entities;
+using CarApi.Requests;
 
 namespace CarApi.Controllers
 {
@@ -21,10 +17,18 @@ namespace CarApi.Controllers
             _autoPliusService = autoPliusService;
         }
 
-        [HttpGet("JustTesting")]
-        public async Task<IActionResult> GetAd()
+        [HttpPost("GetAllAutoPliusCarAdds")]
+        public async Task<IActionResult> GetAllAutoPliusCarAdds(GetAllAutoPliusCarAddRequest request)
         {
-            var result = await _autoPliusService.Test();
+            var result = await _autoPliusService.GetAllAutoPliusCarAdds(
+                request.YearFrom, request.YearTo, request.CarModel);
+            return Ok(result);
+        }
+
+        [HttpPost("GetAllNewAutoPliusCarAdds")]
+        public async Task<IActionResult> GetAllNewAutoPliusCarAdds()
+        {
+            var result = await _autoPliusService.GetAllNewAutoPliusCarAdds();
             return Ok(result);
         }
     }

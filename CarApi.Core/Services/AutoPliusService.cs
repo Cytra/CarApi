@@ -7,7 +7,7 @@ namespace CarApi.Core.Services
     public interface IAutoPliusService
     {
         Task<string> GetNewAdListPage(int page);
-        Task<string> GetAllCarAdsByYear(int page, int yearFrom, int yearTo);
+        Task<string> GetAllCarAdsByYear(string model, int page, int yearFrom, int yearTo);
     }
 
     public class AutoPliusService : IAutoPliusService
@@ -23,17 +23,18 @@ namespace CarApi.Core.Services
         public async Task<string> GetNewAdListPage(int page)
         {
             var client = _httpClientFactory.CreateClient("autoPlius");
-            var url = $"/skelbimai/naudoti-automobiliai?category_id=2&older_not=-1&offer_type=0&qt=&qt_autocomplete=&page_nr={page}";
+            // https://m.autoplius.lt/skelbimai/naudoti-automobiliai?category_id=2&has_damaged_id=10924&older_not=2&steering_wheel_id=10922&sell_price_from=1500&sell_price_to=5000&slist=1713959140&make_date_from=2008&qt=&qt_autocomplete=&page_nr=2
+            var url = $"skelbimai/naudoti-automobiliai?category_id=2&has_damaged_id=10924&older_not=2&steering_wheel_id=10922&sell_price_from=1500&sell_price_to=5000&slist=1713959140&make_date_from=2008&qt=&qt_autocomplete=&page_nr={page}";
             var httpRequest = GetMessage(url);
             var response = await client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead);
             var result = await response.Content.ReadAsStringAsync();
             return result;
         }
 
-        public async Task<string> GetAllCarAdsByYear(int page, int yearFrom, int yearTo)
+        public async Task<string> GetAllCarAdsByYear(string model,int page, int yearFrom, int yearTo)
         {
             var client = _httpClientFactory.CreateClient("autoPlius");
-            var url = $"/skelbimai/naudoti-automobiliai?category_id=2&make_date_from={yearFrom}&make_date_to={yearTo}&make_id%5B92%5D=1184&offer_type=0&qt=&qt_autocomplete=&page_nr={page}";
+            var url = $"/skelbimai/naudoti-automobiliai?category_id=2&has_damaged_id=10924&make_date_from={yearFrom}&make_date_to={yearTo}&make_id{model}&steering_wheel_id=10922&offer_type=0&qt=&qt_autocomplete=&page_nr={page}";
             var httpRequest = GetMessage(url);
             var response = await client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead);
             var result = await response.Content.ReadAsStringAsync();

@@ -10,36 +10,74 @@ namespace CarApi.Core.Services
 {
     public interface IAutoPliusProvider
     {
-        Task<List<CarAd>> Test();
+        Task<List<CarAd>> GetAllNewAutoPliusCarAdds();
+        Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel);
     }
     public class AutoPliusProvider : IAutoPliusProvider
     {
-        private readonly string[] _charsToRemove = new [] { " ", "&", "e", "e", "r", "o", "u", ";", "k", "m" };
+        private readonly string[] _charsToRemove = new [] { " ", "&", "e", "e", 
+            "r", "o", "u", ";", "k", "m", "+", "s", "i", "a", "č"};
+ 
         private readonly IAutoPliusService _autoPliusService;
         public AutoPliusProvider(IAutoPliusService autoPliusService)
         {
             _autoPliusService = autoPliusService;
         }
 
-        public async Task<List<CarAd>> Test()
+        public async Task<List<CarAd>> GetAllNewAutoPliusCarAdds()
         {
+
             var result = new List<CarAd>();
             var page = 1;
-            var carListHtml = await _autoPliusService.GetAllCarAdsByYear(page, 2009, 2015);
+            var carListHtml = await _autoPliusService.GetNewAdListPage(page);
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(carListHtml);
 
             GetAllAdsFromPage(htmlDoc, result);
 
-            var paging = htmlDoc.DocumentNode.Descendants("div").Single(node => node.GetAttributeValue("class", "").Contains("paging")).InnerText.Trim();
-            var splitPaging = paging.Split('/');
+            var paging = htmlDoc.DocumentNode.Descendants("div").SingleOrDefault(node => node.GetAttributeValue("class", "").Contains("paging"));
+            if (paging == null)
+            {
+                return result;
+            }
+            var splitPaging = paging.InnerText.Trim().Split('/');
             var end = int.Parse(splitPaging[1]);
             for (int i = 2; i <= end; i++)
             {
-                var html = await _autoPliusService.GetAllCarAdsByYear(i, 2009, 2015);
+                var html = await _autoPliusService.GetNewAdListPage(i);
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
-                GetAllAdsFromPage(htmlDoc, result);
+                GetAllAdsFromPage(doc, result);
+            }
+
+            return result;
+        }
+
+        public async Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel)
+        {
+            var carId = CarEnumHelper.GetCarModelId(carModel);
+
+            var result = new List<CarAd>();
+            var page = 1;
+            var carListHtml = await _autoPliusService.GetAllCarAdsByYear(carId, page, yearFrom, yearTo);
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(carListHtml);
+
+            GetAllAdsFromPage(htmlDoc, result);
+
+            var paging = htmlDoc.DocumentNode.Descendants("div").SingleOrDefault(node => node.GetAttributeValue("class", "").Contains("paging"));
+            if (paging == null)
+            {
+                return result;
+            }
+            var splitPaging = paging.InnerText.Trim().Split('/');
+            var end = int.Parse(splitPaging[1]);
+            for (int i = 2; i <= end; i++)
+            {
+                var html = await _autoPliusService.GetAllCarAdsByYear(carId, i, yearFrom, yearTo);
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
+                GetAllAdsFromPage(doc, result);
             }
 
             return result;
@@ -87,8 +125,10 @@ namespace CarApi.Core.Services
             }
             else
             {
-                result.CarType = parameters[3].InnerText.Trim();
-                result.City = parameters[4].InnerText.Trim();
+                if(parameters.Count > 3)
+                    result.CarType = parameters[3].InnerText.Trim();
+                if (parameters.Count > 4)
+                    result.City = parameters[4].InnerText.Trim();
             }
 
             return result;
@@ -96,12 +136,21 @@ namespace CarApi.Core.Services
 
         private int ConvertToInt(string input)
         {
-            foreach (var c in _charsToRemove)
+            try
             {
-                input = input.Replace(c, string.Empty);
+                foreach (var c in _charsToRemove)
+                {
+                    input = input.Replace(c, string.Empty);
+                }
+
+                return int.Parse(input);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
-            return int.Parse(input);
         }
     }
 }
