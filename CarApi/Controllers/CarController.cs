@@ -21,14 +21,14 @@ namespace CarApi.Controllers
         public async Task<IActionResult> GetAllAutoPliusCarAdds(GetAllAutoPliusCarAddRequest request)
         {
             var result = await _autoPliusService.GetAllAutoPliusCarAdds(
-                request.YearFrom, request.YearTo, request.CarModel);
+                request.YearFrom, request.YearTo, request.CarModel, request.Cookie);
             return Ok(result);
         }
 
         [HttpPost("GetAllNewAutoPliusCarAdds")]
-        public async Task<IActionResult> GetAllNewAutoPliusCarAdds()
+        public async Task<IActionResult> GetAllNewAutoPliusCarAdds(GetAllNewAutoPliusCarAddRequest request)
         {
-            var result = await _autoPliusService.GetAllNewAutoPliusCarAdds();
+            var result = await _autoPliusService.GetAllNewAutoPliusCarAdds(request.Cookie);
             return Ok(result);
         }
     }

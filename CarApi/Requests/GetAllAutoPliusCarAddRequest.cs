@@ -7,5 +7,6 @@ namespace CarApi.Requests
         public int YearFrom { get; set; }
         public int YearTo { get; set; }
         public CarModels CarModel { get; set; }
+        public string Cookie { get; set; }
     }
 }

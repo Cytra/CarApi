@@ -10,8 +10,8 @@ namespace CarApi.Core.Services
 {
     public interface IAutoPliusProvider
     {
-        Task<List<CarAd>> GetAllNewAutoPliusCarAdds();
-        Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel);
+        Task<List<CarAd>> GetAllNewAutoPliusCarAdds(string cookie);
+        Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel, string cookie);
     }
     public class AutoPliusProvider : IAutoPliusProvider
     {
@@ -24,12 +24,12 @@ namespace CarApi.Core.Services
             _autoPliusService = autoPliusService;
         }
 
-        public async Task<List<CarAd>> GetAllNewAutoPliusCarAdds()
+        public async Task<List<CarAd>> GetAllNewAutoPliusCarAdds(string cookie)
         {
 
             var result = new List<CarAd>();
             var page = 1;
-            var carListHtml = await _autoPliusService.GetNewAdListPage(page);
+            var carListHtml = await _autoPliusService.GetNewAdListPage(page, cookie);
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(carListHtml);
 
@@ -44,7 +44,7 @@ namespace CarApi.Core.Services
             var end = int.Parse(splitPaging[1]);
             for (int i = 2; i <= end; i++)
             {
-                var html = await _autoPliusService.GetNewAdListPage(i);
+                var html = await _autoPliusService.GetNewAdListPage(i,cookie);
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
                 GetAllAdsFromPage(doc, result);
@@ -53,13 +53,13 @@ namespace CarApi.Core.Services
             return result;
         }
 
-        public async Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel)
+        public async Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel, string cookie)
         {
             var carId = CarEnumHelper.GetCarModelId(carModel);
 
             var result = new List<CarAd>();
             var page = 1;
-            var carListHtml = await _autoPliusService.GetAllCarAdsByYear(carId, page, yearFrom, yearTo);
+            var carListHtml = await _autoPliusService.GetAllCarAdsByYear(carId, page, yearFrom, yearTo, cookie);
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(carListHtml);
 
@@ -74,7 +74,7 @@ namespace CarApi.Core.Services
             var end = int.Parse(splitPaging[1]);
             for (int i = 2; i <= end; i++)
             {
-                var html = await _autoPliusService.GetAllCarAdsByYear(carId, i, yearFrom, yearTo);
+                var html = await _autoPliusService.GetAllCarAdsByYear(carId, i, yearFrom, yearTo, cookie);
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
                 GetAllAdsFromPage(doc, result);

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using CarApi.Model;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
-namespace Stocks.Middleware
+namespace CarApi.Middlewares
 {
     public class ExceptionMiddleware
     {
