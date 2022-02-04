@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using CarApi.Core.Services;
@@ -9,7 +8,6 @@ using CarApi.Middlewares;
 using CarApi.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -48,11 +46,7 @@ namespace CarApi
             services.AddControllers()
                 .AddNewtonsoftJson(opt =>
                 {
-                    //opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
-                    //opt.SerializerSettings.Formatting = Formatting.None;
-                    //opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     opt.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    //JsonConvert.DefaultSettings = () => opt.SerializerSettings;
                 });
             services.AddSwaggerGen(c =>
             {
@@ -69,8 +63,6 @@ namespace CarApi
         public void Configure(IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-            //app.UseCors("AllowEverything");
-            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

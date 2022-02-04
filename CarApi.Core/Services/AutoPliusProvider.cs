@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CarApi.Model;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 
 namespace CarApi.Core.Services
 {
@@ -19,14 +20,18 @@ namespace CarApi.Core.Services
             "r", "o", "u", ";", "k", "m", "+", "s", "i", "a", "č"};
  
         private readonly IAutoPliusService _autoPliusService;
-        public AutoPliusProvider(IAutoPliusService autoPliusService)
+        private readonly ILogger<AutoPliusProvider> _logger;
+        public AutoPliusProvider(
+            IAutoPliusService autoPliusService, 
+            ILogger<AutoPliusProvider> logger)
         {
             _autoPliusService = autoPliusService;
+            _logger = logger;
         }
 
         public async Task<List<CarAd>> GetAllNewAutoPliusCarAdds(string cookie)
         {
-
+            _logger.LogInformation("Started GetAllNewAutoPliusCarAdds");
             var result = new List<CarAd>();
             var page = 1;
             var carListHtml = await _autoPliusService.GetNewAdListPage(page, cookie);
@@ -55,6 +60,7 @@ namespace CarApi.Core.Services
 
         public async Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel, string cookie)
         {
+            _logger.LogInformation("Started GetAllAutoPliusCarAdds");
             var carId = CarEnumHelper.GetCarModelId(carModel);
 
             var result = new List<CarAd>();
