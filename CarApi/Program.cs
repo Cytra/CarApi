@@ -13,8 +13,8 @@ namespace CarApi
     {
         public static int Main(string[] args)
         {
-            var configuration = new AWSLoggerConfig("Serilog.ConfigExample");
-            configuration.Region = "us-east-1";
+            var configuration = new AWSLoggerConfig("/aws/elasticbeanstalk/CarApi-dev");
+            configuration.Region = "us-east-1"; 
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)

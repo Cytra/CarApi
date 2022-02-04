@@ -1,14 +1,14 @@
 
 {
     "region" : "us-east-1",
-    "configuration" : "Debug",
+    "configuration" : "Release",
     "framework"     : "net5.0",
     "self-contained" : false,
     "application"    : "CarApi",
     "environment"    : "CarApi-dev",
     "enable-xray"    : false,
     "enhanced-health-type" : "basic",
-    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0ed220517e1853d66\";\"aws:ec2:vpc,Subnets\"=\"subnet-0385cdec0dd80f8b3\"",
+    "additional-options"   : "",
     "solution-stack"       : "64bit Amazon Linux 2 v2.2.9 running .NET Core",
     "environment-type"     : "SingleInstance",
     "cname"                : "carapi-dev",

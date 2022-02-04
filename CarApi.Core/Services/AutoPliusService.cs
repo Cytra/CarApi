@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using CarApi.Model;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace CarApi.Core.Services
 {
@@ -14,31 +13,41 @@ namespace CarApi.Core.Services
     public class AutoPliusService : IAutoPliusService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private AppSettings _settings;
-        public AutoPliusService(IHttpClientFactory httpClientFactory, IOptions<AppSettings> settings)
+        private readonly ILogger<AutoPliusService> _logger;
+        public AutoPliusService(IHttpClientFactory httpClientFactory, ILogger<AutoPliusService> logger)
         {
             _httpClientFactory = httpClientFactory;
-            _settings = settings.Value;
+            _logger = logger;
         }
 
         public async Task<string> GetNewAdListPage(int page, string cookie)
         {
             var client = _httpClientFactory.CreateClient("autoPlius");
-            // https://m.autoplius.lt/skelbimai/naudoti-automobiliai?category_id=2&has_damaged_id=10924&older_not=2&steering_wheel_id=10922&sell_price_from=1500&sell_price_to=5000&slist=1713959140&make_date_from=2008&qt=&qt_autocomplete=&page_nr=2
+            client.DefaultRequestHeaders.Clear();
             var url = $"skelbimai/naudoti-automobiliai?category_id=2&has_damaged_id=10924&older_not=2&steering_wheel_id=10922&sell_price_from=1500&sell_price_to=5000&slist=1713959140&make_date_from=2008&qt=&qt_autocomplete=&page_nr={page}";
             var httpRequest = GetMessage(url,cookie);
             var response = await client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead);
             var result = await response.Content.ReadAsStringAsync();
+            //_logger.LogInformation("Request Headers {@headers}", httpRequest.Headers);
+            //_logger.LogInformation("Headers {@status}", response.StatusCode);
+            //_logger.LogInformation("Headers {@headers}", response.Headers);
+            //_logger.LogInformation("Response from GetNewAdListPage {@response}", result);
             return result;
         }
 
         public async Task<string> GetAllCarAdsByYear(string model,int page, int yearFrom, int yearTo, string cookie)
         {
             var client = _httpClientFactory.CreateClient("autoPlius");
+            client.DefaultRequestHeaders.Clear();
+
             var url = $"/skelbimai/naudoti-automobiliai?category_id=2&has_damaged_id=10924&make_date_from={yearFrom}&make_date_to={yearTo}&make_id{model}&steering_wheel_id=10922&offer_type=0&qt=&qt_autocomplete=&page_nr={page}";
             var httpRequest = GetMessage(url,cookie);
             var response = await client.SendAsync(httpRequest, HttpCompletionOption.ResponseContentRead);
             var result = await response.Content.ReadAsStringAsync();
+            //_logger.LogInformation("Request Headers {@headers}", httpRequest.Headers);
+            //_logger.LogInformation("Headers {@status}", response.StatusCode);
+            //_logger.LogInformation("Headers {@headers}", response.Headers);
+            //_logger.LogInformation("Response from GetNewAdListPage {response}", result);
             return result;
         }
 
