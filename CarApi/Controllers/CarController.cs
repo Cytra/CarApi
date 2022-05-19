@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CarApi.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using CarApi.Requests;
@@ -21,14 +19,14 @@ namespace CarApi.Controllers
         public async Task<IActionResult> GetAllAutoPliusCarAdds(GetAllAutoPliusCarAddRequest request)
         {
             var result = await _autoPliusService.GetAllAutoPliusCarAdds(
-                request.YearFrom, request.YearTo, request.CarModel, request.Cookie);
+                request.YearFrom, request.YearTo, request.CarModel);
             return Ok(result);
         }
 
         [HttpPost("GetAllNewAutoPliusCarAdds")]
-        public async Task<IActionResult> GetAllNewAutoPliusCarAdds(GetAllNewAutoPliusCarAddRequest request)
+        public async Task<IActionResult> GetAllNewAutoPliusCarAdds()
         {
-            var result = await _autoPliusService.GetAllNewAutoPliusCarAdds(request.Cookie);
+            var result = await _autoPliusService.GetAllNewAutoPliusCarAdds();
             return Ok(result);
         }
     }
