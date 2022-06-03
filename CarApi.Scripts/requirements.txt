@@ -1,0 +1,6 @@
+pandas==1.4.2
+Flask==2.1.2
+requests==2.25.1
+json5==0.9.8
+urllib3==1.26.9
+scipy==1.8.0

@@ -1,5 +1,4 @@
-﻿from typing import Tuple
-import pandas as pd
+﻿import pandas as pd
 import requests
 import json 
 pd.options.mode.chained_assignment = None

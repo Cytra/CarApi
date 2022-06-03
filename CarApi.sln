@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarApi.Data", "CarApi.Data\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarApi.Core", "CarApi.Core\CarApi.Core.csproj", "{8F72CBA3-4B6D-4986-9D35-17FE742EABB9}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "CarScript", "CarApi.Scripts\CarScript.pyproj", "{2C1C8C6F-7470-4903-A84E-2F455AA35105}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "CarApi.Scripts", "CarApi.Scripts\CarApi.Scripts.pyproj", "{2C1C8C6F-7470-4903-A84E-2F455AA35105}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{51C3622F-53EB-4DEA-B448-8EF982545711}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
