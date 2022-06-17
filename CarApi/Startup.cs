@@ -48,11 +48,14 @@ namespace CarApi
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()));
+
+            services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseHealthChecks("/healthz");
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

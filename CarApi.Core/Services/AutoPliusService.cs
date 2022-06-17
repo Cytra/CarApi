@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CarApi.Model;
+using Microsoft.Extensions.Options;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
@@ -14,6 +16,11 @@ namespace CarApi.Core.Services
 
     public class AutoPliusService : IAutoPliusService
     {
+        private readonly AppSettings _appSettings;
+        public AutoPliusService(IOptions<AppSettings> options)
+        {
+            _appSettings = options.Value;
+        }
         public async Task<string> GetNewAdListPage(int page)
         {
             using var driver = GetChromeDriver();
@@ -45,7 +52,8 @@ namespace CarApi.Core.Services
         {
             //return new ChromeDriver(@"C:\WebDriver");
             //var seleniumUrl = "http://localhost:4444/wd/hub";
-            var seleniumUrl = "http://172.17.0.2:4444/wd/hub";
+            // http://10.1.1.113:4444
+            var seleniumUrl = $"{_appSettings.SeleniumUrl}:4444/wd/hub";
             var chromeOptions = new ChromeOptions();
             return new RemoteWebDriver(new Uri(seleniumUrl), chromeOptions);
         }

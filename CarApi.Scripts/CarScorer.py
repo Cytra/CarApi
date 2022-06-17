@@ -6,7 +6,9 @@ import urllib3
 urllib3.disable_warnings()
 import scipy.stats as stats
 
-baseUrl = 'https://localhost:5001'
+#baseUrl = 'https://localhost:5001'
+baseUrl = 'http://127.0.0.1:5001'
+
 url = baseUrl + '/api/Car/GetAllAutoPliusCarAdds'
 print(url)
 
