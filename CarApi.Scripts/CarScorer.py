@@ -4,7 +4,6 @@ import json
 pd.options.mode.chained_assignment = None
 import urllib3
 urllib3.disable_warnings()
-from models import CarAdd
 import scipy.stats as stats
 
 baseUrl = 'https://localhost:5001'

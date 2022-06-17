@@ -1,8 +1,6 @@
 
 from flask import Flask
 from CarScorer import GetCarAdds
-from models import CarAdd
-from serializer import CarSerializer
 from flask import jsonify, request
 
 app = Flask(__name__)

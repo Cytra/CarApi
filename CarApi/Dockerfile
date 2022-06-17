@@ -10,7 +10,6 @@ WORKDIR /src
 COPY ["CarApi/CarApi.csproj", "CarApi/"]
 COPY ["CarApi.Model/CarApi.Model.csproj", "CarApi.Model/"]
 COPY ["CarApi.Core/CarApi.Core.csproj", "CarApi.Core/"]
-COPY ["CarApi.Data/CarApi.Data.csproj", "CarApi.Data/"]
 RUN dotnet restore "CarApi/CarApi.csproj"
 COPY . .
 WORKDIR "/src/CarApi"

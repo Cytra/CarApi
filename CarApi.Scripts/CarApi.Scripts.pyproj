@@ -32,10 +32,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CarScorer.py" />
-    <Compile Include="models.py" />
-    <Compile Include="serializer.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Dockerfile" />

@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>90f5c54b-c122-4786-be2c-db8f3b7bfb4a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarApi.Core\CarApi.Core.csproj" />
-    <ProjectReference Include="..\CarApi.Data\CarApi.Data.csproj" />
     <ProjectReference Include="..\CarApi.Model\CarApi.Model.csproj" />
   </ItemGroup>
 

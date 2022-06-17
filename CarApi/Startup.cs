@@ -2,12 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using CarApi.Core.Services;
-using CarApi.Data.Contexts;
-using CarApi.Data.Repositories;
 using CarApi.Middlewares;
 using CarApi.Model;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -34,14 +31,7 @@ namespace CarApi
                 client.DefaultRequestHeaders.Clear();
             });
 
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddOptions<AppSettings>().Bind(Configuration.GetSection("AppSettings"));
-
-            services.AddDbContext<CarContext>(options =>
-            {
-                options.UseSqlServer(AppSettings.SqlConnectionString,
-                    options => options.EnableRetryOnFailure());
-            });
 
             services.AddControllers()
                 .AddNewtonsoftJson(opt =>
