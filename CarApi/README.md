@@ -22,6 +22,7 @@ docker login -u cytra    #Optional
 
 1. docker run -d -p 4444:4444 --shm-size="2g" selenium/standalone-chrome:4.2.2-20220609
 
+
 #Start APP on k8s
 1. docker run -d -p 4444:4444 --shm-size="2g" selenium/standalone-chrome:4.2.2-20220609
 2. cd C:\Users\martynas.samuilovas\Desktop\Kubernetes

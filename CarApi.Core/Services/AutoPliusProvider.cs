@@ -12,7 +12,7 @@ namespace CarApi.Core.Services
     public interface IAutoPliusProvider
     {
         Task<List<CarAd>> GetAllNewAutoPliusCarAdds();
-        Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel);
+        Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel, int toAmount);
     }
     public class AutoPliusProvider : IAutoPliusProvider
     {
@@ -76,14 +76,14 @@ namespace CarApi.Core.Services
             return end;
         }
 
-        public async Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel)
+        public async Task<List<CarAd>> GetAllAutoPliusCarAdds(int yearFrom, int yearTo, CarModels carModel, int toAmount)
         {
             _logger.LogInformation("Started GetAllAutoPliusCarAdds");
             var carId = CarEnumHelper.GetCarModelId(carModel);
 
             var result = new List<CarAd>();
             var page = 1;
-            var carListHtml = await _autoPliusService.GetAllCarAdsByYear(carId, page, yearFrom, yearTo);
+            var carListHtml = await _autoPliusService.GetAllCarAdsByYear(carId, page, yearFrom, yearTo, toAmount);
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(carListHtml);
 
@@ -103,7 +103,7 @@ namespace CarApi.Core.Services
 
             for (int i = 2; i <= end; i++)
             {
-                var html = await _autoPliusService.GetAllCarAdsByYear(carId, i, yearFrom, yearTo);
+                var html = await _autoPliusService.GetAllCarAdsByYear(carId, i, yearFrom, yearTo, toAmount);
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
                 GetAllAdsFromPage(doc, result);
@@ -146,18 +146,26 @@ namespace CarApi.Core.Services
             result.GasType = parameters[1].InnerText.Trim();
             result.GearBox = parameters[2].InnerText.Trim();
             result.Power = parameters[3].InnerText.Trim();
-            if (parameters.Count == 7)
+            
+
+            switch (parameters.Count)
             {
-                result.Mileage = ConvertToInt(parameters[4].InnerText.Trim());
-                result.City = parameters[5].InnerText.Trim();
-                result.CarType = parameters[6].InnerText.Trim();
-            }
-            else
-            {
-                if(parameters.Count > 3)
-                    result.CarType = parameters[3].InnerText.Trim();
-                if (parameters.Count > 4)
+                case 7:
+                    result.Mileage = ConvertToInt(parameters[4].InnerText.Trim());
+                    result.City = parameters[5].InnerText.Trim();
+                    result.CarType = parameters[6].InnerText.Trim();
+                    break;
+                case 6:
+                    result.Mileage = ConvertToInt(parameters[3].InnerText.Trim());
                     result.City = parameters[4].InnerText.Trim();
+                    result.CarType = parameters[5].InnerText.Trim();
+                    break;
+                default:
+                    if (parameters.Count > 3)
+                        result.CarType = parameters[3].InnerText.Trim();
+                    if (parameters.Count > 4)
+                        result.City = parameters[4].InnerText.Trim();
+                    break;
             }
 
             return result;

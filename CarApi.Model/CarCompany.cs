@@ -3,11 +3,14 @@ using System.Collections.Generic;
 
 namespace CarApi.Model
 {
-    public enum CarTypes
+    public enum CarCompany
     {
         Opel = 1,
-        Citroen = 2,
+        Citroen = 92,
         Nissan = 3,
+        Peugeot = 4,
+        Skoda = 48,
+        Toyota = 44,
     }
      
     public enum CarModels
@@ -23,17 +26,21 @@ namespace CarApi.Model
         BMW3 = 9,
         P508 = 10,
         VS60 = 11,
-        BMW740 = 12
+        B740 = 12,
+        P2008 = 13,
+        Fabia = 14,
+        Auris = 15,
+        Clio = 16,
     }
     public static class CarEnumHelper
     {
-        public static List<CarModels> GetCarModels(CarTypes carType)
+        public static List<CarModels> GetCarModels(CarCompany carCompany)
         {
-            switch (carType)
+            switch (carCompany)
             {
-                case CarTypes.Citroen:
+                case CarCompany.Citroen:
                     return new List<CarModels>() { CarModels.C5 };
-                case CarTypes.Opel:
+                case CarCompany.Opel:
                     return new List<CarModels>() { CarModels.Astra, CarModels.Meriva};
             }
 
@@ -66,8 +73,16 @@ namespace CarApi.Model
                     return "%5B59%5D=16860";
                 case CarModels.VS60:
                     return "%5B42%5D=157";
-                case CarModels.BMW740:
+                case CarModels.B740:
                     return "%5B97%5D=10915";
+                case CarModels.P2008:
+                    return "%5B97%5D=18702";
+                case CarModels.Fabia:
+                    return "%5B48%5D=339";
+                case CarModels.Auris:
+                    return "%5B44%5D=279";
+                case CarModels.Clio:
+                    return "%5B54%5D=418";
             }
 
             throw new ArgumentException(nameof(GetCarModelId));

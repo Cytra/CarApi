@@ -6,8 +6,8 @@ import urllib3
 urllib3.disable_warnings()
 import scipy.stats as stats
 
-#baseUrl = 'https://localhost:5001'
-baseUrl = 'http://127.0.0.1:5001'
+baseUrl = 'https://localhost:5001'
+#baseUrl = 'http://127.0.0.1:5001'
 
 url = baseUrl + '/api/Car/GetAllAutoPliusCarAdds'
 print(url)
@@ -27,11 +27,13 @@ def GetCarAdds(fromYear, toYear, carModel, toAmount):
     myobj = {
       'yearFrom': fromYear,
       'yearTo': toYear,
-      'carModel': carModel
+      'carModel': carModel,
+      'toAmount': toAmount
     }
     data = PostViaUrlWithBody(url,myobj)
 
-    data = data[(data['mileage'] > 5000) & (data['carType'] == 'Sedanas')]
+    #data = data[(data['mileage'] > 5000) & (data['carType'] == 'Sedanas')]
+    data = data[(data['mileage'] > 5000)]
 
     data['year_zscore'] = stats.zscore(data['year'])
     data['mileage_zscore'] = stats.zscore(data['mileage'])

@@ -19,7 +19,7 @@ namespace CarApi.Controllers
         public async Task<IActionResult> GetAllAutoPliusCarAdds(GetAllAutoPliusCarAddRequest request)
         {
             var result = await _autoPliusService.GetAllAutoPliusCarAdds(
-                request.YearFrom, request.YearTo, request.CarModel);
+                request.YearFrom, request.YearTo, request.CarModel, request.ToAmount);
             return Ok(result);
         }
 
