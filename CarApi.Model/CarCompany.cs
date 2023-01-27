@@ -31,6 +31,8 @@ namespace CarApi.Model
         Fabia = 14,
         Auris = 15,
         Clio = 16,
+        Karoq = 17,
+        Tiguan = 18,
     }
     public static class CarEnumHelper
     {
@@ -83,6 +85,10 @@ namespace CarApi.Model
                     return "%5B44%5D=279";
                 case CarModels.Clio:
                     return "%5B54%5D=418";
+                case CarModels.Karoq:
+                    return "%5B48%5D=27845";
+                case CarModels.Tiguan:
+                    return "%5B43%5D=207";
             }
 
             throw new ArgumentException(nameof(GetCarModelId));

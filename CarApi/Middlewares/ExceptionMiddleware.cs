@@ -27,6 +27,7 @@ namespace CarApi.Middlewares
             catch (Exception ex)
             {
                 
+                
                 _logger.LogError(ex, $"Error - {ex.Message}");
                 await HandleExceptionAsync(httpContext, ex);
             }

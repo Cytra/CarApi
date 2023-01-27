@@ -48,12 +48,12 @@ namespace CarApi.Core.Services
             return driver.PageSource;
         }
 
-        private ChromeDriver GetChromeDriver()
+        private RemoteWebDriver GetChromeDriver()
         {
-            return new ChromeDriver(@"C:\WebDriver");
-            //var seleniumUrl = $"{_appSettings.SeleniumUrl}:4444/wd/hub";
-            //var chromeOptions = new ChromeOptions();
-            //return new RemoteWebDriver(new Uri(seleniumUrl), chromeOptions);
+            //return new ChromeDriver(@"C:\WebDriver");
+            var seleniumUrl = $"{_appSettings.SeleniumUrl}";
+            var chromeOptions = new ChromeOptions();
+            return new RemoteWebDriver(new Uri(seleniumUrl), chromeOptions);
         }
     }
 }
